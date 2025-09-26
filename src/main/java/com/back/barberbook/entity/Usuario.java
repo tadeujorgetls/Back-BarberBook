@@ -3,65 +3,110 @@ package com.back.barberbook.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
 
-    @Id
-    @JdbcTypeCode(SqlTypes.BINARY)
-    @Column(nullable = false, columnDefinition = "BINARY(16)")
-    private UUID id;
+	public enum Role {
+		CLIENTE, ADMIN
+	}
 
-    private String nome;
-    private String cpf;
-    private String email;
-    private String telefone;
+	@Id
+	@GeneratedValue
+	@Column(name = "id", columnDefinition = "BINARY(16)")
+	private UUID id;
 
-    @Column(name = "senha_hash")
-    private String senhaHash;
+	@Column(name = "nome", nullable = false)
+	private String nome;
 
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.CLIENTE;
+	@Column(name = "cpf", nullable = false, unique = true, length = 14)
+	private String cpf;
 
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+	@Column(name = "email", nullable = false, unique = true)
+	private String email;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+	@Column(name = "telefone", nullable = false)
+	private String telefone;
 
-    public enum Role { CLIENTE, ADMIN }
+	@Column(name = "senha_hash", nullable = false)
+	private String senhaHash;
 
-    @PrePersist
-    public void prePersist() {
-        if (id == null) id = UUID.randomUUID();
-        if (role == null) role = Role.CLIENTE;
-    }
+	@Enumerated(EnumType.STRING)
+	@Column(name = "role", nullable = false)
+	private Role role = Role.CLIENTE;
 
-    // Getters/Setters
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
+	@CreationTimestamp
+	@Column(name = "created_at", nullable = false, updatable = false)
+	private LocalDateTime createdAt;
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+	@UpdateTimestamp
+	@Column(name = "updated_at", nullable = false)
+	private LocalDateTime updatedAt;
 
-    public String getCpf() { return cpf; }
-    public void setCpf(String cpf) { this.cpf = cpf; }
+	public UUID getId() {
+		return id;
+	}
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
-    public String getTelefone() { return telefone; }
-    public void setTelefone(String telefone) { this.telefone = telefone; }
+	public String getNome() {
+		return nome;
+	}
 
-    public String getSenhaHash() { return senhaHash; }
-    public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
+	public String getCpf() {
+		return cpf;
+	}
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
+	public String getSenhaHash() {
+		return senhaHash;
+	}
+
+	public void setSenhaHash(String senhaHash) {
+		this.senhaHash = senhaHash;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
 }
